@@ -37,18 +37,7 @@ If the UI is on another port (e.g. 8001), replace `8000` in the links.
 
 Installing into **Anaconda base** can upgrade NumPy/sklearn and **break** other packages (numba, conda tools). Prefer a **project venv** as above. After any sklearn upgrade, run **`python3 scripts/train_model.py` again** to clear pickle version warnings.
 
-### `zsh: command not found: #`
 
-Do not paste comment lines that start with `#` as their own command; only run the actual shell commands.
-
-**Streamlit** (second terminal):
-
-```bash
-cd tractor-predictive-maintenance/dashboard
-streamlit run streamlit_app.py
-```
-
-Set **TRACTOR_API_URL** if the API is not on port 8000.
 
 ### macOS / XGBoost
 
