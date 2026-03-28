@@ -135,6 +135,32 @@ If you do not use GitHub CLI, create an empty repo with that name on GitHub, the
 
 `render.yaml` is included for Blueprint-based deployment, but the current live service also works with the dashboard’s standard Git-backed Docker flow.
 
+## Optional GitHub and Vercel frontend deploy
+
+If you want to keep the GitHub Actions workflow at [deploy-vercel.yml](/Users/adarshgupta/tractor-predictive-maintenance/.github/workflows/deploy-vercel.yml), add these **repository secrets** in GitHub:
+
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
+- `TRACTOR_API_BASE`
+
+Recommended values:
+
+- `TRACTOR_API_BASE=https://ai-based-tractor-predictive-maintenance.onrender.com`
+- `VERCEL_TOKEN` = token from Vercel account settings
+- `VERCEL_ORG_ID` = your Vercel team ID (for a personal hobby account, use your default team ID)
+- `VERCEL_PROJECT_ID` = the Vercel project ID for this frontend
+
+High-level setup:
+
+1. Create or import this repo as a Vercel project.
+2. In Vercel, copy the **Team ID** and **Project ID** from project/account settings.
+3. In Vercel, create a personal access token.
+4. In GitHub, open **Settings** -> **Secrets and variables** -> **Actions** -> **New repository secret** and add the four secrets above.
+5. Push to `main` again, or re-run the failed workflow from the GitHub Actions page.
+
+The frontend now loads `/assets/js/api-config.js`, so the GitHub Action can inject the Render backend URL into the Vercel-hosted UI before deployment.
+
 ## Resume headline
 
 **AI-Powered Tractor Predictive Maintenance and Fault Diagnosis System** — Python, scikit-learn, XGBoost (optional), SMOTE, FastAPI, Streamlit, SQLAlchemy, LangChain/OpenAI, cited RAG.
