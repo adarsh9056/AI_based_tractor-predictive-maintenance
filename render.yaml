@@ -1,0 +1,22 @@
+# Deploy the FastAPI API (models + /predict + static UI at API root).
+# After push: Dashboard → New → Blueprint → connect this repo, or open:
+#   https://dashboard.render.com/blueprint/new?repo=https://github.com/<you>/<repo>
+#
+# Then set CORS_ORIGINS to your Vercel URL(s), e.g. https://your-app.vercel.app
+# and copy the API URL into Vercel / GitHub as TRACTOR_API_BASE.
+
+services:
+  - type: web
+    name: tractor-pm-api
+    runtime: docker
+    plan: free
+    region: oregon
+    branch: main
+    dockerfilePath: ./Dockerfile.api
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: OPENAI_API_KEY
+        sync: false

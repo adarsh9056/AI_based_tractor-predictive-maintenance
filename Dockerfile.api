@@ -18,5 +18,7 @@ ENV PYTHONPATH=/app/backend
 RUN python scripts/train_model.py
 
 WORKDIR /app/backend
+ENV PORT=8000
 EXPOSE 8000
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Render and other hosts set PORT; local docker-compose uses 8000 by default.
+CMD ["sh", "-c", "exec uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}"]
