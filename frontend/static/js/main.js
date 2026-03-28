@@ -3,16 +3,32 @@ const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 
 const API_STORAGE = "tractor_predictive_maintenance_api_base";
 
+function isLoopbackHost(hostname) {
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
+function isLoopbackUrl(raw) {
+  try {
+    const base = typeof window !== "undefined" ? window.location.origin : "http://127.0.0.1:8000";
+    const u = new URL(raw, base);
+    return isLoopbackHost(u.hostname);
+  } catch {
+    return false;
+  }
+}
+
+function shouldIgnoreStoredApiBase(raw) {
+  if (typeof window === "undefined" || !window.location?.protocol?.startsWith("http")) return false;
+  return !isLoopbackHost(window.location.hostname) && isLoopbackUrl(raw);
+}
+
 function defaultApiOrigin() {
   if (typeof window !== "undefined" && window.__TRACTOR_API_BASE__) {
     const b = String(window.__TRACTOR_API_BASE__).trim().replace(/\/$/, "");
     if (b) return b;
   }
   if (typeof window !== "undefined" && window.location?.protocol?.startsWith("http")) {
-    const h = window.location.hostname;
-    if (h === "localhost" || h === "127.0.0.1") {
-      return window.location.origin.replace(/\/$/, "");
-    }
+    return window.location.origin.replace(/\/$/, "");
   }
   return "http://127.0.0.1:8000";
 }
@@ -38,8 +54,12 @@ function loadApiBase() {
   try {
     const v = localStorage.getItem(API_STORAGE);
     if (v) {
-      input.value = v;
-      return;
+      if (shouldIgnoreStoredApiBase(v)) {
+        localStorage.removeItem(API_STORAGE);
+      } else {
+        input.value = v;
+        return;
+      }
     }
   } catch {
     /* ignore */

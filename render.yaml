@@ -1,9 +1,11 @@
-# Deploy the FastAPI API (models + /predict + static UI at API root).
-# After push: Dashboard → New → Blueprint → connect this repo, or open:
+# Deploy the FastAPI API and same-origin static UI on Render.
+# After push: Dashboard -> New -> Blueprint -> connect this repo, or open:
 #   https://dashboard.render.com/blueprint/new?repo=https://github.com/<you>/<repo>
 #
-# Then set CORS_ORIGINS to your Vercel URL(s), e.g. https://your-app.vercel.app
-# and copy the API URL into Vercel / GitHub as TRACTOR_API_BASE.
+# Optional:
+# - set OPENAI_API_KEY if you want GPT-backed diagnosis
+# - add DATABASE_URL if you want persistent PostgreSQL logs
+# - otherwise the app can use SQLite for a quick demo deploy
 
 services:
   - type: web

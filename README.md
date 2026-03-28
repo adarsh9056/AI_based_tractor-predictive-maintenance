@@ -27,11 +27,27 @@ Industrial framing uses the public **AI4I 2020** predictive maintenance schema (
 - **RNF** remains inherently hard; SMOTE + class weights help but do not guarantee detection.
 - **Rule hints** in the API are **heuristic** (AI4I-style), not SHAP.
 
+## Local development
 
+```bash
+cd tractor-predictive-maintenance
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r backend/requirements.txt
+python3 scripts/train_model.py
+cd backend && python3 -m uvicorn app:app --reload --port 8000
+```
 
-**Primary UI:** [http://127.0.0.1:8000/](http://127.0.0.1:8000/) · **Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) · **Health:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
+**Local UI:** [http://127.0.0.1:8000/](http://127.0.0.1:8000/) · **Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) · **Health:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 
 If the UI is on another port (e.g. 8001), replace `8000` in the links.
+
+## Live deployment
+
+**Live UI:** [https://ai-based-tractor-predictive-maintenance.onrender.com/](https://ai-based-tractor-predictive-maintenance.onrender.com/) · **Docs:** [https://ai-based-tractor-predictive-maintenance.onrender.com/docs](https://ai-based-tractor-predictive-maintenance.onrender.com/docs) · **Health:** [https://ai-based-tractor-predictive-maintenance.onrender.com/health](https://ai-based-tractor-predictive-maintenance.onrender.com/health)
+
+- Primary production hosting is **Render** using `Dockerfile.api`.
+- The hosted frontend and API run on the **same origin** (`onrender.com`), so no separate frontend host is required.
+- The console now defaults to the **current site origin** in hosted environments and ignores stale saved `localhost` API base values from earlier local testing.
 
 ### Conda `base` vs venv
 
@@ -89,7 +105,7 @@ docker compose up api
 
 `DATABASE_URL=postgresql+psycopg2://...` — see `docker-compose.yml` for a local Postgres service.
 
-## GitHub and Vercel (live UI)
+## GitHub and Render
 
 **Suggested repository name** (GitHub does not allow spaces): `ai-powered-tractor-predictive-maintenance`.
 
@@ -103,25 +119,21 @@ gh repo create ai-powered-tractor-predictive-maintenance --public --source=. --r
 
 If you do not use GitHub CLI, create an empty repo with that name on GitHub, then `git remote add origin https://github.com/<you>/ai-powered-tractor-predictive-maintenance.git` and `git push -u origin main`.
 
-**Vercel** hosts the **static** site in `frontend/` well; the **FastAPI** API (models, `/predict`, `/docs`) should run on a Python host (e.g. [Render](https://render.com), Railway, Fly.io) or `docker compose` on a VPS.
+**Render** is the primary recommended deployment target for this repo because it runs the FastAPI API and serves the static frontend from the same origin.
 
-1. Deploy the API and copy its public origin (no trailing slash), e.g. `https://tractor-api-xxxx.onrender.com`.
-2. In [Vercel](https://vercel.com) → Import the GitHub repo → leave **Root Directory** as the repo root (this project’s `vercel.json` sets `outputDirectory` to `frontend` and runs `node scripts/inject-api-base.mjs`).
-3. Under **Environment Variables**, add **`TRACTOR_API_BASE`** = that API origin. Redeploy so the console’s default API URL points at your live backend.
-4. On the API host, set **CORS** so your `*.vercel.app` origin is allowed (see `backend/app.py` / env docs if present).
+1. Push the repo to GitHub.
+2. In Render, create a **Web Service** from the GitHub repo with:
+   - **Runtime** = `Docker`
+   - **Dockerfile Path** = `Dockerfile.api`
+   - **Health Check Path** = `/health`
+3. Add environment variables:
+   - `CORS_ORIGINS=*`
+   - `OPENAI_API_KEY` and `OPENAI_MODEL` if you want GPT-backed diagnosis
+   - optional `DATABASE_URL` if you want persistent PostgreSQL logs
+4. If you do **not** set `DATABASE_URL`, the app falls back to SQLite for a quick demo deploy.
+5. If you want persistent logs, create a Render Postgres database and paste its **Internal Database URL** into `DATABASE_URL`, then redeploy.
 
-Without `TRACTOR_API_BASE`, the hosted UI still defaults to `http://127.0.0.1:8000`; users can paste the real API URL in the console field.
-
-**Fastest live link from your machine** (Cursor’s cloud agents cannot call Vercel from here; you run this once locally):
-
-```bash
-cd tractor-predictive-maintenance
-bash scripts/deploy-vercel.sh
-```
-
-The CLI prints a `https://….vercel.app` preview URL. Use `bash scripts/deploy-vercel.sh --prod` after `vercel link` for a stable production URL. Set `TRACTOR_API_BASE` first if your API is already hosted.
-
-**Fully automated after GitHub push:** add repository secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, and optionally `TRACTOR_API_BASE`. Pushes to `main` run `.github/workflows/deploy-vercel.yml`.
+`render.yaml` is included for Blueprint-based deployment, but the current live service also works with the dashboard’s standard Git-backed Docker flow.
 
 ## Resume headline
 
