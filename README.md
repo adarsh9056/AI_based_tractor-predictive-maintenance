@@ -27,15 +27,7 @@ Industrial framing uses the public **AI4I 2020** predictive maintenance schema (
 - **RNF** remains inherently hard; SMOTE + class weights help but do not guarantee detection.
 - **Rule hints** in the API are **heuristic** (AI4I-style), not SHAP.
 
-## Quick start
 
-```bash
-cd tractor-predictive-maintenance
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r backend/requirements.txt
-python3 scripts/train_model.py
-cd backend && python3 -m uvicorn app:app --reload --port 8000
-```
 
 **Primary UI:** [http://127.0.0.1:8000/](http://127.0.0.1:8000/) · **Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) · **Health:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 
