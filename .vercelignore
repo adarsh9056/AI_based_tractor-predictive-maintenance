@@ -1,0 +1,25 @@
+# Local Python envs (often 10k+ files — main cause of Vercel 15k file limit)
+.venv/
+venv/
+env/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Not needed for frontend build (build = node scripts/inject-api-base.mjs + frontend/)
+backend/
+data/
+models/
+tests/
+dashboard/
+.git/
+
+# Secrets / local
+.env
+.env.*
+*.db
+*.log
+
+# Docker / misc large trees
+node_modules/

@@ -1,0 +1,137 @@
+{
+  "compare": [
+    {
+      "model": "random_forest",
+      "accuracy": 0.8665,
+      "precision_macro": 0.6274414641945284,
+      "recall_macro": 0.7553252734599885,
+      "f1_macro": 0.6463930364678909
+    },
+    {
+      "model": "xgboost",
+      "accuracy": 0.9585,
+      "precision_macro": 0.6242203715335127,
+      "recall_macro": 0.6974860871233929,
+      "f1_macro": 0.6479256424505174
+    }
+  ],
+  "chosen": "xgboost",
+  "imbalance_note": "Accuracy can look high when the majority class is Healthy; rely on macro-F1, per-class recall, confusion matrix, and CV on the held-out training split.",
+  "cross_validation_train_fold": {
+    "cv_f1_macro_mean": 0.6553763362539321,
+    "cv_f1_macro_std": 0.015199220729077667,
+    "n_splits": 5
+  },
+  "confusion_matrix": {
+    "labels": [
+      "Healthy",
+      "Heat Dissipation Failure",
+      "Overstrain Failure",
+      "Power Failure",
+      "Random Failure",
+      "Tool Wear Failure"
+    ],
+    "matrix": [
+      [
+        1858,
+        0,
+        7,
+        0,
+        31,
+        34
+      ],
+      [
+        0,
+        23,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        16,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        18,
+        0,
+        0
+      ],
+      [
+        4,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        7,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    ]
+  },
+  "per_class_report": {
+    "Healthy": {
+      "precision": 0.9941144997324772,
+      "recall": 0.9626943005181348,
+      "f1-score": 0.9781521453013952,
+      "support": 1930.0
+    },
+    "Heat Dissipation Failure": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 23.0
+    },
+    "Overstrain Failure": {
+      "precision": 0.6956521739130435,
+      "recall": 1.0,
+      "f1-score": 0.8205128205128205,
+      "support": 16.0
+    },
+    "Power Failure": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 18.0
+    },
+    "Random Failure": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 4.0
+    },
+    "Tool Wear Failure": {
+      "precision": 0.05555555555555555,
+      "recall": 0.2222222222222222,
+      "f1-score": 0.08888888888888889,
+      "support": 9.0
+    },
+    "accuracy": 0.9585,
+    "macro avg": {
+      "precision": 0.6242203715335127,
+      "recall": 0.6974860871233929,
+      "f1-score": 0.6479256424505174,
+      "support": 2000.0
+    },
+    "weighted avg": {
+      "precision": 0.9856357096331448,
+      "recall": 0.9585,
+      "f1-score": 0.9713809227799488,
+      "support": 2000.0
+    }
+  },
+  "report_text": "                          precision    recall  f1-score   support\n\n                 Healthy       0.99      0.96      0.98      1930\nHeat Dissipation Failure       1.00      1.00      1.00        23\n      Overstrain Failure       0.70      1.00      0.82        16\n           Power Failure       1.00      1.00      1.00        18\n          Random Failure       0.00      0.00      0.00         4\n       Tool Wear Failure       0.06      0.22      0.09         9\n\n                accuracy                           0.96      2000\n               macro avg       0.62      0.70      0.65      2000\n            weighted avg       0.99      0.96      0.97      2000\n"
+}

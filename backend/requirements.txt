@@ -1,0 +1,26 @@
+# Install: pip install -r backend/requirements.txt
+# For reproducible CI/Docker builds, see Dockerfile (Python 3.11) and optional: pip freeze > requirements.lock
+#
+# Note: psycopg2-binary is still 2.x on PyPI (3.x is the separate "psycopg" package). Do not use >=3.0 here.
+#
+# imbalanced-learn 0.13 + scikit-learn 1.8 breaks (ImportError: _is_pandas_df). Use 0.14+ with sklearn 1.4+.
+# For an isolated env, prefer: python3 -m venv .venv (avoid conda base conflicts with numba, etc.).
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.0
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.4.0
+xgboost>=2.0
+imbalanced-learn>=0.14.0
+joblib>=1.3
+sqlalchemy>=2.0
+psycopg2-binary>=2.9.9,<3
+python-dotenv>=1.0
+httpx>=0.26
+streamlit>=1.30
+langchain-core>=0.2.0
+langchain-openai>=0.1.0
+langchain-community>=0.2.0
+kagglehub>=0.2
+pytest>=8.0

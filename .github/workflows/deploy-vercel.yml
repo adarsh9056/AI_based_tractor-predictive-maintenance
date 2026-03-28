@@ -1,0 +1,34 @@
+# After you add the secrets below, every push to main deploys the frontend to Vercel.
+# Get VERCEL_TOKEN at https://vercel.com/account/tokens
+# Get ORG_ID and PROJECT_ID: Vercel project → Settings → General
+
+name: Deploy frontend to Vercel
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Inject API base URL
+        env:
+          TRACTOR_API_BASE: ${{ secrets.TRACTOR_API_BASE }}
+        run: node scripts/inject-api-base.mjs
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
+          working-directory: ./

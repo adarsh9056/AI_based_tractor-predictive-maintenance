@@ -1,0 +1,9 @@
+.venv
+venv
+__pycache__
+.git
+.gitignore
+.pytest_cache
+.ipynb_checkpoints
+.env
+*.db

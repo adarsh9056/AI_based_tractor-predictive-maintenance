@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tractor Predictive Maintenance — AI fault diagnosis</title>
+  <meta name="description" content="Tractor Predictive Maintenance: sensor-driven failure classification and maintenance guidance for agricultural machinery." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+</head>
+<body>
+  <a class="skip-link" href="#console">Skip to console</a>
+
+  <header class="site-header">
+    <a class="brand" href="#">Tractor Predictive Maintenance</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#console">Console</a>
+      <a href="/docs" target="_blank" rel="noopener">API</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__media" role="img" aria-label="Tractor in field at dawn"></div>
+      <div class="hero__veil"></div>
+      <div class="hero__inner">
+        <p class="hero__eyebrow">Industrial AI · Agricultural machinery</p>
+        <h1 id="hero-title" class="hero__title">Know failure before the field stops.</h1>
+        <p class="hero__lede">Classify heat, power, and wear risk from live sensor traces—then get urgency-ranked guidance grounded in maintenance playbooks.</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#console">Open console</a>
+          <a class="btn btn--ghost" href="/docs" target="_blank" rel="noopener">View API schema</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="strip" aria-label="Capabilities">
+      <div class="strip__inner">
+        <div class="strip__item">
+          <span class="strip__label">Ingest</span>
+          <p class="strip__text">Ambient &amp; machine temperature (K), RPM, torque, component wear time.</p>
+        </div>
+        <span class="strip__rule" aria-hidden="true"></span>
+        <div class="strip__item">
+          <span class="strip__label">Classify</span>
+          <p class="strip__text">HDF, PWF, OSF, TWF, RNF mapped to operator language.</p>
+        </div>
+        <span class="strip__rule" aria-hidden="true"></span>
+        <div class="strip__item">
+          <span class="strip__label">Advise</span>
+          <p class="strip__text">Cited manual rows plus optional LLM synthesis.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="flow" aria-labelledby="flow-title">
+      <div class="flow__inner">
+        <h2 id="flow-title" class="flow__title">Pipeline</h2>
+        <ol class="flow__steps">
+          <li><span class="flow__step-num">1</span> Normalize &amp; engineer features (incl. power in kW)</li>
+          <li><span class="flow__step-num">2</span> Single best classifier (RF or XGBoost) + raw class probabilities</li>
+          <li><span class="flow__step-num">3</span> Log to SQL · rule hints · cited diagnosis</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="console" class="console" aria-labelledby="console-title" tabindex="-1">
+      <div class="console__head">
+        <div>
+          <h2 id="console-title" class="console__title">Operations console</h2>
+          <p class="console__sub">Sliders send Kelvin (dataset unit); Celsius shown for readability. Power shown in kW.</p>
+        </div>
+        <div class="console__api">
+          <label class="field-label" for="api-base">API base URL</label>
+          <input id="api-base" class="field-input" type="url" autocomplete="off" spellcheck="false" placeholder="Same as this page (auto)" value="" />
+        </div>
+      </div>
+
+      <div class="console__grid">
+        <div class="panel panel--inputs">
+          <h3 class="panel__heading">Sensor inputs</h3>
+          <p class="helper helper--block"><strong>K</strong> = Kelvin (model input). <strong>°C</strong> = Kelvin − 273.15. <strong>RPM</strong> = revolutions per minute. <strong>Nm</strong> = torque. <strong>ΔT</strong> = machine − ambient (K).</p>
+
+          <div class="presets" role="group" aria-label="Demo presets">
+            <span class="presets__label">Presets</span>
+            <button type="button" class="btn btn--small btn--ghost" data-preset="healthy">Healthy case</button>
+            <button type="button" class="btn btn--small btn--ghost" data-preset="heat">Heat risk</button>
+            <button type="button" class="btn btn--small btn--ghost" data-preset="power">Power risk</button>
+            <button type="button" class="btn btn--small btn--ghost" data-preset="wear">Tool wear risk</button>
+          </div>
+
+          <div class="control" data-metric="Air temperature [K]">
+            <label for="air">Ambient temperature <span class="unit">K</span></label>
+            <input id="air" type="range" min="295" max="305" step="0.1" value="298" />
+            <output for="air" id="air-out">298.0 K (24.9°C)</output>
+            <p class="helper">Air around the machine (dataset column: air temperature).</p>
+          </div>
+          <div class="control" data-metric="Process temperature [K]">
+            <label for="proc">Machine operating temperature <span class="unit">K</span></label>
+            <input id="proc" type="range" min="300" max="315" step="0.1" value="308" />
+            <output for="proc" id="proc-out">308.0 K (34.9°C)</output>
+            <p class="helper">Process / component temperature used in the AI4I schema.</p>
+          </div>
+          <div class="control">
+            <label for="rpm">Rotational speed <span class="unit">rpm</span></label>
+            <input id="rpm" type="range" min="1000" max="2500" step="10" value="1500" />
+            <output for="rpm" id="rpm-out">1500 rpm</output>
+            <p class="helper">Engine or shaft speed in revolutions per minute.</p>
+          </div>
+          <div class="control">
+            <label for="torque">Torque <span class="unit">Nm</span></label>
+            <input id="torque" type="range" min="10" max="60" step="0.5" value="35" />
+            <output for="torque" id="torque-out">35.0 Nm</output>
+            <p class="helper">Twisting effort on the driveline / PTO.</p>
+          </div>
+          <div class="control">
+            <label for="wear">Component wear time <span class="unit">min</span></label>
+            <input id="wear" type="range" min="0" max="260" step="1" value="120" />
+            <output for="wear" id="wear-out">120 min</output>
+            <p class="helper">Wear minutes (AI4I “tool wear” — mapped to implement/component life).</p>
+          </div>
+          <div class="derived">
+            <div>
+              <span class="derived__k">ΔT</span>
+              <span id="temp-diff">—</span>
+              <span class="unit">K</span>
+              <span class="derived__hint" id="temp-diff-hint"></span>
+            </div>
+            <div>
+              <span class="derived__k">Power</span>
+              <span id="power-out">—</span>
+              <span class="unit">kW</span>
+              <span class="derived__hint">P = T×n / 9549</span>
+            </div>
+          </div>
+          <div class="console__actions">
+            <label class="toggle">
+              <input type="checkbox" id="use-llm" checked />
+              <span>Include diagnosis (LLM when API key set)</span>
+            </label>
+            <button type="button" class="btn btn--primary" id="btn-predict">Run prediction</button>
+          </div>
+          <p class="console__hint" id="status-line" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="panel panel--results">
+          <h3 class="panel__heading">Assessment</h3>
+          <div class="result-hero" id="result-hero" hidden>
+            <div class="result-hero__main">
+              <span class="result-hero__label">Prediction</span>
+              <p class="result-hero__value" id="out-pred">—</p>
+            </div>
+            <div class="result-hero__band" id="out-band-wrap" hidden>
+              <span class="band" id="out-band">—</span>
+            </div>
+          </div>
+          <div class="explain-block" id="explain-block" hidden>
+            <h4 class="explain-block__title">Top reasons (rules + context)</h4>
+            <ul class="explain-list" id="explain-list"></ul>
+          </div>
+          <div class="gauge-block" id="gauge-block" hidden>
+            <div class="gauge-block__top">
+              <span class="gauge-block__label">Failure probability</span>
+              <span class="gauge-block__value" id="out-fp">0%</span>
+            </div>
+            <div class="gauge" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="gauge-bar">
+              <div class="gauge__fill" id="gauge-fill"></div>
+            </div>
+            <p class="gauge-block__note">1 − P(Healthy) from class probabilities (not isotonic-calibrated).</p>
+          </div>
+          <div class="prob-block" id="prob-block" hidden>
+            <h4 class="prob-block__title">Class probabilities</h4>
+            <ul class="prob-list" id="prob-list"></ul>
+          </div>
+          <div class="citations-block" id="citations-block" hidden>
+            <h4 class="citations-block__title">Manual citations</h4>
+            <ol class="citations-list" id="citations-list"></ol>
+          </div>
+          <div class="advice-block" id="advice-block" hidden>
+            <h4 class="advice-block__title">Guidance</h4>
+            <pre class="advice-block__body" id="out-advice"></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="logs-wrap">
+        <div class="logs-wrap__head">
+          <h3 class="logs-wrap__title">Recent logs</h3>
+          <span class="logs-meta" id="logs-meta"></span>
+          <button type="button" class="btn btn--small btn--ghost" id="btn-refresh-logs">Refresh</button>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table" id="logs-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Prediction</th>
+                <th>Band</th>
+                <th>P(fail)</th>
+                <th>RPM</th>
+                <th>Torque</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="logs-body">
+              <tr class="data-table__empty"><td colspan="7">Load logs after the API is running.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>Photo: agricultural machinery context imagery · <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></p>
+      <p>Tractor Predictive Maintenance · AI4I-style sensor schema · FastAPI backend</p>
+    </footer>
+  </main>
+
+  <script src="/assets/js/api-config.js"></script>
+  <script src="/assets/js/main.js" type="module"></script>
+</body>
+</html>

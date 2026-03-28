@@ -1,0 +1,8 @@
+condition,diagnosis,action
+"High process–air temp gap collapse + low RPM","Heat Dissipation Failure (cooling margin lost)","Stop work; check coolant, radiator, fan belt, and airflow. Do not run under load until temperatures stabilize."
+"Power (RPM×Torque) outside normal band","Power Failure / driveline load issue","Reduce throttle; inspect fuel delivery, air filter, alternator load, and transmission coupling. Log power trend."
+"High tool wear × torque product","Overstrain Failure risk","Replace or service worn implement components; reduce draft load; inspect hitch and PTO alignment."
+"Tool wear in replacement window (200–240 min)","Tool Wear Failure window","Schedule controlled shutdown for tool/implement service; avoid sudden full load."
+"Rare unexplained fault pattern","Random / intermittent failure","Run full sensor log capture; check connectors, grounding, and ECU fault codes before returning to field."
+"Elevated temperature with normal RPM","Thermal stress","Verify hydraulic oil cooler, engine thermostat, and radiator cleanliness."
+"Normal sensor profile","Healthy operation","Continue scheduled maintenance; keep monitoring trends."
