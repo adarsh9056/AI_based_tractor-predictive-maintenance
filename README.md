@@ -43,10 +43,12 @@ If the UI is on another port (e.g. 8001), replace `8000` in the links.
 
 ## Live deployment
 
-**Live UI:** [https://ai-based-tractor-predictive-maintenance.onrender.com/](https://ai-based-tractor-predictive-maintenance.onrender.com/) · **Docs:** [https://ai-based-tractor-predictive-maintenance.onrender.com/docs](https://ai-based-tractor-predictive-maintenance.onrender.com/docs) · **Health:** [https://ai-based-tractor-predictive-maintenance.onrender.com/health](https://ai-based-tractor-predictive-maintenance.onrender.com/health)
 
-Frontend: https://ai-based-tractor-predictive-maintenance-57yef6dwt.vercel.app/
+
+Frontend(Live Link) : https://ai-based-tractor-predictive-maintenance-57yef6dwt.vercel.app/ 
+
 API Docs: https://ai-based-tractor-predictive-maintenance.onrender.com/docs
+
 Backend: https://ai-based-tractor-predictive-maintenance.onrender.com/
 
 - Primary production hosting is **Render** using `Dockerfile.api`.
